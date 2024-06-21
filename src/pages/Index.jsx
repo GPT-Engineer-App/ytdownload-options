@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FaDownload } from "react-icons/fa";
 import { Container, VStack, Input, Button, Select, Text, Box, useToast } from "@chakra-ui/react";
 
 const Index = () => {
@@ -22,7 +23,7 @@ const Index = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`https://youtube-video-downloader-api.herokuapp.com/api/info?url=${url}`);
+      const response = await fetch(`https://yt-dlp-server.herokuapp.com/api/download?url=${url}&format=${format}`);
       const data = await response.json();
 
       if (data.error) {
@@ -34,7 +35,7 @@ const Index = () => {
           isClosable: true,
         });
       } else {
-        const downloadUrl = data.formats.find(f => f.qualityLabel === format || f.mimeType.includes(format)).url;
+        const downloadUrl = data.url;
         window.location.href = downloadUrl;
       }
     } catch (error) {
@@ -68,7 +69,7 @@ const Index = () => {
           <option value="4k">4k</option>
           <option value="mp3">mp3</option>
         </Select>
-        <Button onClick={handleDownload} isLoading={loading} colorScheme="blue" size="lg" width="100%">
+        <Button onClick={handleDownload} isLoading={loading} colorScheme="blue" size="lg" width="100%" leftIcon={<FaDownload />}>
           Download
         </Button>
       </VStack>
